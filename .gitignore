@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+
+# 作図スクリプトの既定出力先（EXPF_FIG_DIR未指定時）
+figures/

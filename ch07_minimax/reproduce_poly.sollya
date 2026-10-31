@@ -1,0 +1,49 @@
+/* 第7章: glibcの多項式係数を sollya で再現できるか試す。
+ *
+ * 近似したいもの: 2^t を t in [-1/64, 1/64] で、相対誤差を最小に。
+ * ただし glibc は定数項を 1 に固定している。
+ *
+ * 実行: sollya reproduce_poly.sollya
+ */
+
+prec = 300!;
+display = decimal!;
+
+I = [-1/64; 1/64];
+f = 2^x;
+
+write("======================================================\n");
+write("A: 定数項を固定しない、素直な相対誤差ミニマックス\n");
+write("======================================================\n");
+pa = remez(1, [|0,1,2,3|], I, 1/f);
+for i from 0 to 3 do { write("  a", i, " = ", coeff(pa, i), "\n"); };
+write("  max rel err = ", dirtyinfnorm(pa/f - 1, I), "\n");
+write("\n");
+
+write("======================================================\n");
+write("B: 定数項を 1 に固定した場合\n");
+write("======================================================\n");
+/* p(t) = 1 + t*q(t) と置くと、相対誤差は
+ *   (p - f)/f = (1 + t*q - 2^t)/2^t = (q - g) * (t / 2^t)     ただし g = (2^t - 1)/t
+ * となる。sollyaの remez(F, mon, I, w) は ||F - p*w|| を最小化するので、
+ *   F = g * (t/2^t) = 1 - 2^(-t),  w = t/2^t
+ * を渡せば ||(g - q) * (t/2^t)|| を最小化できる。 */
+W = x / 2^x;
+G = 1 - 2^(-x);
+q = remez(G, [|0,1,2|], I, W);
+pb = 1 + x * q;
+for i from 0 to 3 do { write("  a", i, " = ", coeff(pb, i), "\n"); };
+write("  max rel err = ", dirtyinfnorm(pb/f - 1, I), "\n");
+write("\n");
+
+write("======================================================\n");
+write("glibc が実際に使っている係数\n");
+write("======================================================\n");
+pg = 1
+   + 0x1.62e42ff0c52d6p-1 * x
+   + 0x1.ebfce50fac4f3p-3 * x^2
+   + 0x1.c6af84b912394p-5 * x^3;
+for i from 0 to 3 do { write("  a", i, " = ", coeff(pg, i), "\n"); };
+write("  max rel err = ", dirtyinfnorm(pg/f - 1, I), "\n");
+
+quit;

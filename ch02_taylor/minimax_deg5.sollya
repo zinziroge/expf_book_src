@@ -1,0 +1,25 @@
+/* 第2章: 区間[-0.5, 0.5]でexp(x)を5次多項式で近似する。
+ * テーラー展開との比較用に、相対誤差を最小にする係数を求める。
+ *
+ * 実行: sollya minimax_deg5.sollya
+ */
+
+prec = 200!;
+display = decimal!;
+
+f = exp(x);
+d = [-0.5; 0.5];
+
+/* sollyaの remez(f, n, d, w) は ||f - p*w|| を最小化する。
+ * ここで欲しいのは相対誤差 ||(f - p)/f|| であり、これは
+ *   ||(f - p)/f|| = ||1 - p*(1/f)||
+ * と書けるので、近似対象を 1、重みを 1/f として渡す。 */
+p = remez(1, [|0,...,5|], d, 1/f);
+
+write("minimax coefficients:\n");
+for i from 0 to 5 do { write("  a", i, " = ", coeff(p, i), "\n"); };
+
+write("minimax max rel err = ", dirtyinfnorm(p/f - 1, d), "\n");
+write("taylor  max rel err = ", dirtyinfnorm(taylor(f, 5, 0)/f - 1, d), "\n");
+
+quit;

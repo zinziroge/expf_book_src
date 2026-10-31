@@ -1,0 +1,10 @@
+[project]
+name = "py-tool"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "matplotlib>=3.11.0",
+    "mpmath>=1.4.1",
+]
