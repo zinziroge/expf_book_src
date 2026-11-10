@@ -1,4 +1,4 @@
-# expf_book_src — 『glibc expf を読む』検証コード
+# expf_book_src — 『expf()の計算』検証コード
 
 本文に出てくる数値・図は、すべてここにあるコードを実際に実行して得たものです。
 机上の理論値や記憶による数値は本文に書かない、という方針で運用しています。
@@ -122,3 +122,7 @@ cd ch04_motivation && ../py_tool/.venv/bin/python find_double_rounding.py
 | 丸め境界への最接近 | 2^-29 ULP（double rounding に必要な 2^-30 に届かず） |
 | 速度比 | `expf` が約1.54倍速い |
 
+
+## ライセンス
+
+MIT License（[LICENSE](LICENSE) を参照）。

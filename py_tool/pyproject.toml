@@ -1,8 +1,7 @@
 [project]
 name = "py-tool"
 version = "0.1.0"
-description = "Add your description here"
-readme = "README.md"
+description = "『expf()の計算』検証コード用のPython環境"
 requires-python = ">=3.14"
 dependencies = [
     "matplotlib>=3.11.0",
